@@ -30,6 +30,7 @@ jobs:
           git reset --soft HEAD~3
           git add .
           git commit -m "Test the action"
+          git status
 
       - name: Push changes
         uses: ad-m/github-push-action@master

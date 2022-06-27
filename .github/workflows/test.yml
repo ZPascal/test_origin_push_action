@@ -30,7 +30,7 @@ jobs:
           git commit -m "Test the action"
 
       - name: Push changes
-        uses: ad-m/github-push-action@20cdc7c2a4f0e472934aa4c5e6d441f7bbb250c4
+        uses: ad-m/github-push-action@031b24e46b727bea14e34b87a969fa2d2a7e98b5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           force_with_lease: true

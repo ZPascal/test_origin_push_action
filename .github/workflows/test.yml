@@ -25,15 +25,12 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git status
-          git branch
           git reset --soft HEAD~3
           git add .
           git commit -m "Test the action"
-          git status
 
       - name: Push changes
-        uses: ad-m/github-push-action@40a52018e69068ff628cd110304dd16582a54822
+        uses: ad-m/github-push-action@4858e6bbe67a41be2b8240a4c4b62cb349bb36f8
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           force_with_lease: true

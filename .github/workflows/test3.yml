@@ -1,4 +1,4 @@
-name: PR checks Test
+name: PR tags checks test
 
 on:
   push:
@@ -25,12 +25,14 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          git status
+          git branch
           git reset --soft HEAD~3
-          git add docs
+          git add .
           git commit -m "Test the action"
 
       - name: Push changes
-        uses: ad-m/github-push-action@cfc10a6161cb45fdaa7cb39dfb870e1ac7c32d3d
+        uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           force_with_lease: true

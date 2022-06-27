@@ -23,7 +23,6 @@ jobs:
 
       - name: Commit files
         run: |
-          env
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git reset --soft HEAD~3
@@ -31,7 +30,7 @@ jobs:
           git commit -m "Test the action"
 
       - name: Push changes
-        uses: ad-m/github-push-action@4858e6bbe67a41be2b8240a4c4b62cb349bb36f8
+        uses: ad-m/github-push-action@762e639501f627ae1b3fbcce0ef54d0227b1fef5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           force_with_lease: true

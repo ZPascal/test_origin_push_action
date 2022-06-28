@@ -31,7 +31,7 @@ jobs:
           git status
 
       - name: Push changes
-        uses: ad-m/github-push-action@c23352f84a9cae70481a5853c6eda318142e7d50
+        uses: ad-m/github-push-action@0553b0b4f47332aa6fd72927a5cf1af8c83bf006
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           force_with_lease: true

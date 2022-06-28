@@ -28,9 +28,10 @@ jobs:
           git reset --soft HEAD~3
           git add .
           git commit -m "Test the action"
+          git status
 
       - name: Push changes
-        uses: ad-m/github-push-action@abc6794e9ccb5ee808198f2104f96da1abc4825c
+        uses: ad-m/github-push-action@c23352f84a9cae70481a5853c6eda318142e7d50
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           force_with_lease: true

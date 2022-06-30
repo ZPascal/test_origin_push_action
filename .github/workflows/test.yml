@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
 
       - name: Generate file
-        run: rm docs/test1.txt && echo test1 > docs/test1.txt
+        run: rm docs/test1.txt && echo test1 > docs/test1.txt && echo $GITHUB_REF_NAME
 
       - name: Commit files
         run: |
@@ -30,11 +30,11 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add docs
           git commit -m "Test the action"
-          git status
+          git tag $GITHUB_REF_NAME
 
       - name: Push changes
-        uses: ad-m/github-push-action@b80395bd2271903200b27db6eebc7b6ee046202e
+        uses: ad-m/github-push-action@c9daab17ef9134cf802bde52a2f766df3da756ec
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          force_with_lease: true
+          force: true
           tags: true

@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
 
       - name: Generate file
-        run: rm docs/test*.txt && echo test9 > docs/test9.txt
+        run: rm docs/test*.txt && echo test > docs/test0.txt
 
       - name: Commit files
         run: |

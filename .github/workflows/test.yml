@@ -34,7 +34,7 @@ jobs:
           git tag $GITHUB_REF_NAME
 
       - name: Push changes
-        uses: ad-m/github-push-action@a6cda06069df6bbef5e32c407a51470e18b1433a
+        uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           force: true

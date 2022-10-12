@@ -19,20 +19,16 @@ jobs:
           fetch-depth: 0
 
       - name: Generate file
-        run: rm docs/test*.txt && echo test > docs/test0.txt
+        run: rm docs/test*.txt && echo test1 > docs/test1.txt
 
       - name: Commit files
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git tag -d $GITHUB_REF_NAME
           git add docs
           git commit -m "Test the action"
-          git tag $GITHUB_REF_NAME
 
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          force: true
-          tags: true

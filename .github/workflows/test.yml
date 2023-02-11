@@ -23,8 +23,8 @@ jobs:
 
       - name: Commit files
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "pascal.zimmermann@theiotstudio.com"
+          git config --local user.name "ZPascal"
           git add test
           git commit -m "Test the action"
 

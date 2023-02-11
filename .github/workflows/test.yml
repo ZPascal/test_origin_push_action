@@ -33,3 +33,5 @@ jobs:
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
           repository: ZPascal/test_clone_push_action
+        env:
+          GITHUB_ACTOR: ZPascal

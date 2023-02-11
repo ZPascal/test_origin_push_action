@@ -2,7 +2,7 @@ name: PR tags checks test
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ test ]
 
 jobs:
 
@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
 
       - name: Generate file
-        run: rm docs/test*.txt && echo test1 > docs/test1.txt
+        run: rm docs/test*.txt && echo test2 > docs/test1.txt
 
       - name: Commit files
         run: |

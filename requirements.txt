@@ -1,4 +1,0 @@
-jinja2
-pydoc-markdown
-mkdocs
-mkdocs-material

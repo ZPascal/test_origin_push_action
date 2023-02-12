@@ -31,7 +31,7 @@ jobs:
           git commit -m "Test the action"
 
       - name: Push changes
-        uses: ad-m/github-push-action@1371b5c52836f7fca357a95588d3ad9052d5915b
+        uses: ad-m/github-push-action@fe76bf86895a8f32daf9c4352d846b1419c8bd1f
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
           repository: ZPascal/test_clone_push_action

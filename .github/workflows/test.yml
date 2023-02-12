@@ -20,7 +20,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Generate file
-        run: rm test/test*.txt && echo test > test/test1.txt
+        run: rm test/test*.txt && echo test1 > test/test1.txt
 
       - name: Commit files
         run: |
@@ -34,4 +34,4 @@ jobs:
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
           repository: ZPascal/test_clone_push_action
-          force_with_lease: true
+          force: true

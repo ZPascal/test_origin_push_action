@@ -37,3 +37,4 @@ jobs:
           github_token: ${{ secrets.PAT_TOKEN }}
           repository: ZPascal/test_clone_push_action
           github_user: ZPascal
+          force: true

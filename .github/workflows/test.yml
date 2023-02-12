@@ -30,7 +30,7 @@ jobs:
           cat .git/config
 
       - name: Push changes
-        uses: ad-m/github-push-action@67f58ca25c4b5f58bd2a01889d7305d5236d442d
+        uses: ad-m/github-push-action@650ed2d10bf6218299f7bf9ad8340c2e2ca416a0
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
           repository: ZPascal/test_clone_push_action

@@ -25,6 +25,8 @@ jobs:
         run: |
           git config --local user.email "pascal.zimmermann@theiotstudio.com"
           git config --local user.name "ZPascal"
+          git config user.email "pascal.zimmermann@theiotstudio.com"
+          git config user.name "ZPascal"
           git add test
           git commit -m "Test the action"
 

@@ -27,9 +27,11 @@ jobs:
           git config --local user.name "ZPascal"
           git add test
           git commit -m "Test the action"
+          cat .git/config
 
       - name: Push changes
-        uses: ad-m/github-push-action@0817b5ea27f2669d3de05e5829776a327bd887ca
+        uses: ad-m/github-push-action@f7b8a8025db5c3e448311327d477463725201283
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
           repository: ZPascal/test_clone_push_action
+          github_user: ZPascal

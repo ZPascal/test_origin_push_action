@@ -20,21 +20,18 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Generate file
-        run: rm test/test*.txt && echo test2 > test/test1.txt
+        run: rm test/test*.txt && echo test3 > test/test1.txt
 
       - name: Commit files
         run: |
           git config --local user.email "pascal.zimmermann@theiotstudio.com"
           git config --local user.name "ZPascal"
-          git config user.email "pascal.zimmermann@theiotstudio.com"
-          git config user.name "ZPascal"
           git add test
           git commit -m "Test the action"
 
       - name: Push changes
-        uses: ad-m/github-push-action@fe76bf86895a8f32daf9c4352d846b1419c8bd1f
+        uses: ad-m/github-push-action@fe00f878bc3d0626ecdddddef6396f5a4049ca4a
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
           repository: ZPascal/test_clone_push_action
-          github_user: ZPascal
           force: true

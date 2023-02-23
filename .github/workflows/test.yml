@@ -37,28 +37,28 @@ jobs:
           repository: ZPascal/test_clone_push_action
           force: true
 
-    dummy2:
-      runs-on: ubuntu-18.04
-      strategy:
-        matrix:
-          python-version: [ '3.x' ]
+  dummy2:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python-version: [ '3.x' ]
 
-      steps:
-        - uses: actions/checkout@v3
-          with:
-            ref: ${{ github.head_ref }}
-            fetch-depth: 0
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
 
-        - name: Generate file
-          run: rm test/test*.txt && echo test2 > test/test1.txt
+      - name: Generate file
+        run: rm test/test*.txt && echo test2 > test/test1.txt
 
-        - name: Commit files
-          run: |
-            cd test 
-            git config --local user.email "pascal.zimmermann@theiotstudio.com"
-            git config --local user.name "ZPascal"
-            git add test1.txt
-            git commit -m "Test the action"
+      - name: Commit files
+        run: |
+          cd test 
+          git config --local user.email "pascal.zimmermann@theiotstudio.com"
+          git config --local user.name "ZPascal"
+          git add test1.txt
+          git commit -m "Test the action"
 
-        - name: Push changes
-          uses: ad-m/github-push-action@master
+      - name: Push changes
+        uses: ad-m/github-push-action@master

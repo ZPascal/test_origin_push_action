@@ -50,7 +50,7 @@ jobs:
           fetch-depth: 0
 
       - name: Generate file
-        run: rm test/test*.txt && echo test2 > test/test1.txt
+        run: rm test/test*.txt && echo test11 > test/test11.txt
 
       - name: Commit files
         run: |
@@ -61,4 +61,4 @@ jobs:
           git commit -m "Test the action"
 
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@74d8e0b6f0b86b61232a9b3a28b45bf8a5593532

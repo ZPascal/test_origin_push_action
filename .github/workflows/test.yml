@@ -38,7 +38,7 @@ jobs:
           force: true
 
   dummy2:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [ '3.x' ]
@@ -62,3 +62,6 @@ jobs:
 
       - name: Push changes
         uses: ad-m/github-push-action@master
+        with:
+          repository: ZPascal/test_clone_push_action
+          force: true

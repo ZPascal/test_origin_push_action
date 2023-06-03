@@ -22,8 +22,8 @@ jobs:
       - name: Commit files
         run: |
           cd test 
-          git config --local user.email "pascal.zimmermann@theiotstudio.com"
-          git config --local user.name "ZPascal"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add test3.txt
           git commit -m "Test the action"
 

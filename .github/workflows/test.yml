@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
 
       - name: Generate file
-        run: rm test/test*.txt && echo test2 > test/test2.txt
+        run: rm test/test*.txt && echo test > test/test2.txt
 
       - name: Commit files
         run: |
@@ -51,7 +51,7 @@ jobs:
           fetch-depth: 0
 
       - name: Generate file
-        run: rm test/test*.txt && echo test1 > test/test1.txt
+        run: rm test/test1.txt && echo test > test/test1.txt
 
       - name: Commit files
         run: |
@@ -65,5 +65,4 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           repository: ZPascal/test_origin_push_action
-          force: true
           github_token: ${{ secrets.GITHUB_TOKEN }}

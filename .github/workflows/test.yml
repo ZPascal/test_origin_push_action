@@ -20,21 +20,21 @@ jobs:
           fetch-depth: 0
 
       - name: Generate file
-        run: rm test/test*.txt && echo test3 > test/test3.txt
+        run: rm test/test*.txt && echo test2 > test/test2.txt
 
       - name: Commit files
         run: |
           cd test 
           git config --local user.email "pascal.zimmermann@theiotstudio.com"
           git config --local user.name "ZPascal"
-          git add test3.txt
+          git add test2.txt
           git commit -m "Test the action"
 
       - name: Push changes
-        uses: ad-m/github-push-action@0fafdd62b84042d49ec0cb92d9cac7f7ce4ec79e
+        uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
-          repository: ZPascal/test_clone_push_action
+          repository: ZPascal/test_origin_push_action
           force: true
 
   dummy2:
@@ -51,7 +51,7 @@ jobs:
           fetch-depth: 0
 
       - name: Generate file
-        run: rm test/test*.txt && echo test2 > test/test1.txt
+        run: rm test/test*.txt && echo test1 > test/test1.txt
 
       - name: Commit files
         run: |
@@ -64,6 +64,6 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          repository: ZPascal/test_clone_push_action
+          repository: ZPascal/test_origin_push_action
           force: true
           github_token: ${{ secrets.GITHUB_TOKEN }}

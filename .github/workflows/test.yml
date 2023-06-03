@@ -17,7 +17,6 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
-          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Generate file
         run: rm test/test*.txt && echo test2 > test/test1.txt
@@ -25,8 +24,8 @@ jobs:
       - name: Commit files
         run: |
           cd test 
-          git config --local user.email "pascal.zimmermann@theiotstudio.com"
-          git config --local user.name "ZPascal"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add test1.txt
           git commit -m "Test the action"
 
@@ -55,8 +54,8 @@ jobs:
       - name: Commit files
         run: |
           cd test 
-          git config --local user.email "pascal.zimmermann@theiotstudio.com"
-          git config --local user.name "ZPascal"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add test1.txt
           git commit -m "Test the action"
 

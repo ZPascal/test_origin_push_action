@@ -62,7 +62,7 @@ jobs:
           git commit -m "Test the action"
 
       - name: Push changes
-        uses: ad-m/github-push-action@c361e2bb0747df3110bdbe051b209b40766670ec
+        uses: ad-m/github-push-action@0fafdd62b84042d49ec0cb92d9cac7f7ce4ec79e
         with:
           repository: ZPascal/test_clone_push_action
           force: true

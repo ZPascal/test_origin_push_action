@@ -33,6 +33,4 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          repository: ZPascal/test_origin_push_action
           github_token: ${{ secrets.PAT_TOKEN }}
-          force_with_lease: true

@@ -19,13 +19,13 @@ jobs:
           fetch-depth: 0
 
       - name: Generate file
-        run: rm test/test1.txt && echo test11 > test/test1.txt
+        run: rm test/test1.txt && echo test1 > test/test1.txt
 
       - name: Commit files
         run: |
           cd test 
-          git config --local user.email "info@theiotstudio.com"
-          git config --local user.name "tis-service-user"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add test1.txt
           git commit -m "Test the action"
 

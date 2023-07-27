@@ -33,5 +33,4 @@ jobs:
         uses: ad-m/github-push-action@2a04164f6158421a41f18e883981014e91871d56
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          github_url: https://github.com
           branch: ${{ github.head_ref }}

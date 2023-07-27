@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
 
       - name: Generate file
-        run: rm test/test* && echo test/test2 > test2.txt
+        run: rm test/* && echo test/test2 > test2.txt
 
       - name: Commit files
         run: |
@@ -30,7 +30,7 @@ jobs:
           git commit -m "Test the action"
 
       - name: Push changes
-        uses: ad-m/github-push-action@2a04164f6158421a41f18e883981014e91871d56
+        uses: ad-m/github-push-action@283e90187b354cbf5abb968321cac832fe07dee5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.head_ref }}

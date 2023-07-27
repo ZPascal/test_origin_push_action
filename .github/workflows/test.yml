@@ -32,5 +32,5 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@d07cafc3e07e2ae06841d780f0d592ac94b2e0c7
         with:
-          github_token: ${{ secrets.PAT_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           repository: ZPascal/test_origin_push_action

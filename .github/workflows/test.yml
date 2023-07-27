@@ -20,18 +20,18 @@ jobs:
           fetch-depth: 0
 
       - name: Generate file
-        run: rm test/test*.txt && echo test2 > test/test2.txt
+        run: rm test/test*.txt && echo test/test2 > test2.txt
 
       - name: Commit files
         run: |
-          cd test 
           git config --local user.email "pascal.zimmermann@theiotstudio.com"
           git config --local user.name "ZPascal"
-          git add test2.txt
+          git add test
           git commit -m "Test the action"
 
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@d07cafc3e07e2ae06841d780f0d592ac94b2e0c7
         with:
-          github_token: ${{ secrets.PAT_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           repository: ZPascal/test_origin_push_action
+          force: true

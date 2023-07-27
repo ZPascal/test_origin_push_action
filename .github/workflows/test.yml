@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  dummy:
+  http-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -31,39 +31,7 @@ jobs:
           git commit -m "Test the action"
 
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@d07cafc3e07e2ae06841d780f0d592ac94b2e0c7
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
           repository: ZPascal/test_origin_push_action
-          force: true
-
-  dummy2:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [ '3.x' ]
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0
-
-      - name: Generate file
-        run: rm test/test*.txt && echo test1 > test/test1.txt
-
-      - name: Commit files
-        run: |
-          cd test 
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add test1.txt
-          git commit -m "Test the action"
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          repository: ZPascal/test_origin_push_action
-          force: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}

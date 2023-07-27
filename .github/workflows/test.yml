@@ -24,7 +24,6 @@ jobs:
 
       - name: Commit files
         run: |
-          cd test 
           git config --local user.email "pascal.zimmermann@theiotstudio.com"
           git config --local user.name "ZPascal"
           git add test2.txt

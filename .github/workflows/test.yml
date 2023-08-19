@@ -33,5 +33,5 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
-          repository: ZPascal/test_clone_push_action
+          repository: ZPascal/test_origin_push_action
           force: true

@@ -15,7 +15,7 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
           token : ${{ secrets.PAT_TOKEN }}
-          persist-credentials: false
+          persist-credentials: true
 
 
       - name: Generate file

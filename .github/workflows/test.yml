@@ -18,7 +18,7 @@ jobs:
 
 
       - name: Generate file
-        run: rm test/test*.txt && echo test1 > test/test1.txt
+        run: rm test/test*.txt && echo test111 > test/test1.txt
 
       - name: Commit files
         run: |

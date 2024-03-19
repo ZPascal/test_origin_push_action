@@ -25,7 +25,7 @@ jobs:
           git config --local user.name "ZPascal"
           git add test1.txt
           git commit -m "Test the action"
-          git tag 0.0.11
+          git tag 0.0.12
 
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
@@ -33,4 +33,4 @@ jobs:
           github_token: ${{ secrets.PAT_TOKEN }}
           branch: main
           tags: true
-          force_with_lease: true
+          force: true

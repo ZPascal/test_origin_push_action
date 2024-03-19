@@ -30,7 +30,7 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
         with:
-          github_token:
+          github_token: ${{ secrets.PAT_TOKEN }}
           branch: main
           tags: true
           force_with_lease: true

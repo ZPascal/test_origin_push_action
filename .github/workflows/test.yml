@@ -10,16 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
           token : ${{ secrets.PAT_TOKEN }}
-          persist-credentials: true
-
 
       - name: Generate file
-        run: rm test/test*.txt && echo test5 > test/test1.txt
+        run: rm test/test*.txt && echo test6 > test/test1.txt
 
       - name: Commit files
         run: |
@@ -28,10 +26,12 @@ jobs:
           git config --local user.name "ZPascal"
           git add test1.txt
           git commit -m "Test the action"
+          git tag 0.0.11
 
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v0.8.0
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
-          repository: ZPascal/test_origin_push_action
-          force: true
+          branch: ${{ github.ref }}
+          tags: true
+          force_with_lease: true

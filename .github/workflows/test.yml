@@ -16,7 +16,7 @@ jobs:
           persist-credentials: true
 
       - name: Generate file
-        run: rm test/test*.txt && echo $(shuf -i 1-100 -n 1) > test/test1.txt
+        run: rm test/test*.txt && echo $(shuf -i 1-120 -n 1) > test/test1.txt
 
       - name: Commit files
         run: |
@@ -25,12 +25,9 @@ jobs:
           git config --local user.name "ZPascal"
           git add test1.txt
           git commit -m "Test the action"
-          git tag 0.0.13
 
       - name: Push changes
-        uses: ad-m/github-push-action@34934d3e2d23981685894955fa318a2c07efb744
+        uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.PAT_TOKEN }}
           branch: main
-          tags: true
           force_with_lease: true

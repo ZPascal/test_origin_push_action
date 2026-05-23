@@ -1,0 +1,71 @@
+name: Test token input
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  # ── Scenario A: new `token` input ─────────────────────────────────────────
+  test-token-input:
+    name: "Push via token: input"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Configure git identity
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name  "github-actions[bot]"
+
+      - name: Make local changes
+        run: |
+          echo "token-input-$(shuf -i 1-9999 -n 1)" > test/test1.txt
+          git add test/test1.txt
+          git commit -m "test(pr-375): verify token: input name"
+
+      # Uses the PR branch (issue-56) which adds support for `token:` input.
+      - name: Push changes using token input
+        uses: ad-m/github-push-action@issue-56
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          force: true
+
+  # ── Scenario B: legacy `github_token` input (backward-compat) ─────────────
+  test-github-token-input-backward-compat:
+    name: "Push via github_token: input (backward compat)"
+    runs-on: ubuntu-latest
+    needs: test-token-input
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Configure git identity
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name  "github-actions[bot]"
+
+      - name: Make local changes
+        run: |
+          echo "github-token-input-$(shuf -i 1-9999 -n 1)" > test/test1.txt
+          git add test/test1.txt
+          git commit -m "test(pr-375): verify github_token: still works (backward compat)"
+
+      # Uses the PR branch (issue-56); `github_token` should still be resolved
+      # as a fallback when `token` is not provided.
+      - name: Push changes using legacy github_token input
+        uses: ad-m/github-push-action@issue-56
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          force: true
+

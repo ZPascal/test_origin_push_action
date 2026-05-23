@@ -60,7 +60,7 @@ jobs:
       - name: Push changes (pull=ff-only, expected to FAIL on diverged history)
         id: push_ff_diverged
         continue-on-error: true
-        uses: ad-m/github-push-action@cbe6715993830e9b10a2e7b60e9268cac52f9b20
+        uses: ad-m/github-push-action@master
         with:
           branch: main
           pull: ff-only
@@ -101,7 +101,7 @@ jobs:
           git commit -m "test: pull=ff-only happy-path"
 
       - name: Push changes (pull=ff-only, happy path)
-        uses: ad-m/github-push-action@cbe6715993830e9b10a2e7b60e9268cac52f9b20
+        uses: ad-m/github-push-action@master
         with:
           branch: main
           pull: ff-only

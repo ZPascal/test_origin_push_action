@@ -1,0 +1,57 @@
+name: Test pull=merge before push (PR #373)
+
+# Tests that `pull: merge` successfully reconciles diverged histories using
+# a merge commit strategy.
+#
+# Scenario (same divergence setup as the rebase test):
+#   1. Check out main.
+#   2. Simulate a concurrent push by another actor (advances origin/main).
+#   3. Make a local commit on main  →  diverged.
+#   4. Call github-push-action with `pull: merge` → should merge-pull and push.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-pull-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout on a real branch ─────────────────────────────────────────
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Configure git identity
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name  "github-actions[bot]"
+
+      # ── 2. Simulate concurrent push ──────────────────────────────────────────
+      - name: Simulate concurrent push by another actor
+        run: |
+          git checkout -b _concurrent-actor
+          echo "concurrent-$(date -u +%s)" > test/concurrent.txt
+          git add test/concurrent.txt
+          git commit -m "chore: concurrent commit from another actor"
+          git push origin _concurrent-actor:main
+          git checkout main
+
+      # ── 3. Local changes ──────────────────────────────────────────────────────
+      - name: Make local changes
+        run: |
+          echo "merge-$(shuf -i 1-9999 -n 1)" > test/test1.txt
+          git add test/test1.txt
+          git commit -m "test: pull=merge scenario"
+
+      # ── 4. Push with pull: merge ──────────────────────────────────────────────
+      - name: Push changes (pull=merge)
+        uses: ad-m/github-push-action@cbe6715993830e9b10a2e7b60e9268cac52f9b20
+        with:
+          github_token: ${{ secrets.PAT_TOKEN }}
+          branch: main
+          pull: merge
+

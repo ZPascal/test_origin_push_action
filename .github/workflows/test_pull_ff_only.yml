@@ -1,0 +1,111 @@
+name: Test pull=ff-only before push (PR #373)
+
+# Tests that `pull: ff-only` successfully fast-forwards the local branch to
+# match a remote that is strictly ahead (no divergence).
+#
+# Scenario:
+#   1. Check out main.
+#   2. Push a new commit to origin/main from a separate branch (remote gets ahead
+#      of local, but there is NO local commit yet — so it is fast-forwardable).
+#   3. Make a local commit AFTER the remote has moved ahead  →  local and
+#      remote diverge; ff-only would normally fail.
+#
+#   *** ff-only is only meaningful when the remote is strictly ahead ***
+#   So this test pushes to origin/main, does NOT make a local commit, and then
+#   uses `pull: ff-only` just to verify the action can fast-forward and push.
+#
+#   A separate step verifies the diverged case would fail by checking that git
+#   itself returns a non-zero exit code — proving the action's guard is correct.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-pull-ff-only:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout on a real branch ─────────────────────────────────────────
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Configure git identity
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name  "github-actions[bot]"
+
+      # ── 2. Advance origin/main so local is strictly behind (fast-forwardable) ─
+      - name: Advance remote (another actor pushes; local has no new commit yet)
+        run: |
+          git checkout -b _concurrent-actor
+          echo "concurrent-$(date -u +%s)" > test/concurrent.txt
+          git add test/concurrent.txt
+          git commit -m "chore: concurrent commit from another actor"
+          git push origin _concurrent-actor:main
+          git checkout main        # local main is behind but NOT diverged
+
+      # ── 3. Local changes (made AFTER remote moved ahead → diverged again) ─────
+      #   We still add a local commit to prove ff-only detects the divergence.
+      #   The action is expected to fail with the git ff-only error in this case,
+      #   so we use `continue-on-error: true` and assert the step indeed failed.
+      - name: Make a conflicting local commit (diverges from remote)
+        run: |
+          echo "ff-only-$(shuf -i 1-9999 -n 1)" > test/test1.txt
+          git add test/test1.txt
+          git commit -m "test: pull=ff-only scenario (diverged)"
+
+      - name: Push changes (pull=ff-only, expected to FAIL on diverged history)
+        id: push_ff_diverged
+        continue-on-error: true
+        uses: ad-m/github-push-action@cbe6715993830e9b10a2e7b60e9268cac52f9b20
+        with:
+          github_token: ${{ secrets.PAT_TOKEN }}
+          branch: main
+          pull: ff-only
+
+      - name: Assert that ff-only correctly failed on diverged history
+        run: |
+          if [ "${{ steps.push_ff_diverged.outcome }}" != "failure" ]; then
+            echo "ERROR: expected the ff-only push to fail on diverged history, but it succeeded."
+            exit 1
+          fi
+          echo "OK: ff-only correctly rejected the diverged push."
+
+      # ── 4. Now test the ff-only happy path: no local commit, remote is ahead ──
+      #   Reset local main to the original HEAD so there is no local divergence,
+      #   then use pull: ff-only which should fast-forward and push our work.
+      - name: Reset local branch to original HEAD (no local divergence)
+        run: git reset --hard HEAD~1   # drop the local commit we made above
+
+      - name: Confirm local is behind remote (fast-forwardable)
+        run: |
+          git fetch origin main
+          LOCAL=$(git rev-parse HEAD)
+          REMOTE=$(git rev-parse origin/main)
+          if [ "$LOCAL" = "$REMOTE" ]; then
+            echo "ERROR: expected local to be behind remote."
+            exit 1
+          fi
+          # Check that local is an ancestor of remote (fast-forwardable)
+          git merge-base --is-ancestor "$LOCAL" "$REMOTE" \
+            && echo "OK: local is a strict ancestor of remote — ff-only will work." \
+            || (echo "ERROR: local is NOT an ancestor of remote." && exit 1)
+
+      # Make a NEW local commit on top of the now fast-forwardable state
+      - name: Add new local commit after fast-forward
+        run: |
+          echo "ff-only-happy-$(shuf -i 1-9999 -n 1)" > test/test1.txt
+          git add test/test1.txt
+          git commit -m "test: pull=ff-only happy-path"
+
+      - name: Push changes (pull=ff-only, happy path)
+        uses: ad-m/github-push-action@cbe6715993830e9b10a2e7b60e9268cac52f9b20
+        with:
+          github_token: ${{ secrets.PAT_TOKEN }}
+          branch: main
+          pull: ff-only
+

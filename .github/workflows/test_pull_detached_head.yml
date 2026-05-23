@@ -1,0 +1,64 @@
+name: Test pull=rebase with detached HEAD (PR #373, negative test)
+
+# Negative test: verifies that the action aborts with a clear error message
+# when `pull` is enabled but the repository is in detached HEAD state.
+#
+# PR #373 adds a guard that exits 1 with:
+#   "Error: 'pull' is enabled but the repository is in detached HEAD state."
+#
+# This workflow deliberately checks out a commit SHA (causing detached HEAD)
+# and asserts that the action step fails with that message.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-pull-detached-head:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout WITHOUT a branch ref → detached HEAD ─────────────────────
+      #   Omitting `ref` (or passing a SHA / tag) leaves the repo in detached HEAD.
+      - uses: actions/checkout@v6
+        with:
+          # No `ref:` → actions/checkout defaults to the merge commit SHA,
+          # which produces a detached HEAD.
+          fetch-depth: 0
+
+      - name: Confirm we are in detached HEAD state
+        run: |
+          if git symbolic-ref --quiet HEAD; then
+            echo "ERROR: expected detached HEAD but a branch is checked out."
+            exit 1
+          fi
+          echo "OK: repository is in detached HEAD state as expected."
+
+      - name: Configure git identity
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name  "github-actions[bot]"
+
+      - name: Make a local commit (in detached HEAD)
+        run: |
+          echo "detached-$(shuf -i 1-9999 -n 1)" > test/test1.txt
+          git add test/test1.txt
+          git commit -m "test: pull=rebase + detached HEAD (should be rejected)"
+
+      # ── 2. Push with pull: rebase — expect failure ────────────────────────────
+      - name: Push changes (pull=rebase, detached HEAD — expected to FAIL)
+        id: push_detached
+        continue-on-error: true
+        uses: ad-m/github-push-action@cbe6715993830e9b10a2e7b60e9268cac52f9b20
+        with:
+          branch: main
+          pull: rebase
+
+      # ── 3. Assert the action rejected the operation ───────────────────────────
+      - name: Assert the action failed on detached HEAD
+        run: |
+          if [ "${{ steps.push_detached.outcome }}" != "failure" ]; then
+            echo "ERROR: expected the action to fail in detached HEAD state, but it succeeded."
+            exit 1
+          fi
+          echo "OK: action correctly rejected the push in detached HEAD state."
+

@@ -1,0 +1,61 @@
+name: Test pull=rebase before push (PR #373)
+
+# Tests that `pull: rebase` successfully reconciles diverged histories.
+#
+# Scenario:
+#   1. Check out main.
+#   2. Simulate a concurrent push by another actor (advances origin/main beyond local).
+#   3. Make a local commit on main  →  local and remote are now diverged.
+#   4. Call github-push-action with `pull: rebase` → should rebase and push without error.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-pull-rebase:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout on a real branch (required by the pull feature) ──────────
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Configure git identity
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name  "github-actions[bot]"
+
+      # ── 2. Simulate a concurrent commit from another actor ───────────────────
+      #    Branch off the same HEAD, make a commit, push it straight to origin/main.
+      #    This advances the remote without touching the local main branch,
+      #    creating a diverged-history situation.
+      - name: Simulate concurrent push by another actor
+        run: |
+          git checkout -b _concurrent-actor
+          echo "concurrent-$(date -u +%s)" > test/concurrent.txt
+          git add test/concurrent.txt
+          git commit -m "chore: concurrent commit from another actor"
+          git push origin _concurrent-actor:main
+          git checkout main        # local main is now one commit BEHIND remote
+
+      # ── 3. Make our own local change on main ──────────────────────────────────
+      - name: Make local changes
+        run: |
+          echo "rebase-$(shuf -i 1-9999 -n 1)" > test/test1.txt
+          git add test/test1.txt
+          git commit -m "test: pull=rebase scenario"
+
+      # ── 4. Push with pull: rebase ─────────────────────────────────────────────
+      #    At this point local main and remote main have diverged.
+      #    The action must pull --rebase and then push successfully.
+      - name: Push changes (pull=rebase)
+        uses: ad-m/github-push-action@cbe6715993830e9b10a2e7b60e9268cac52f9b20
+        with:
+          github_token: ${{ secrets.PAT_TOKEN }}
+          branch: main
+          pull: rebase
+

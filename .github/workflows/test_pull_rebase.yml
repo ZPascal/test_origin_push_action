@@ -22,7 +22,6 @@ jobs:
           ref: main
           fetch-depth: 0
           persist-credentials: true
-          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Configure git identity
         run: |
@@ -55,7 +54,6 @@ jobs:
       - name: Push changes (pull=rebase)
         uses: ad-m/github-push-action@cbe6715993830e9b10a2e7b60e9268cac52f9b20
         with:
-          github_token: ${{ secrets.PAT_TOKEN }}
           branch: main
           pull: rebase
 
